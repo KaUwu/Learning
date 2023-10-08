@@ -1,2 +1,2 @@
-# Learning
-Learning C++
+## Creator
+@kauvvu on Discord
