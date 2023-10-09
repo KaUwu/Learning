@@ -1,10 +1,10 @@
 #include <iostream>
-char board[3][3];
-char boardCheck[3][3];
-int xCord;
-int yCord;
+char board[3][3]; //main board
+char boardCheck[3][3]; //board for checking if there has been something placed
+int xCord; //input taken for Vertical
+int yCord; //input for horizontal
 
-void inputX() {
+void inputX() { //input for X, used for oMove
     bool done = 0;
     while(!done) {
     if(!(std::cin >> xCord))         
@@ -15,7 +15,7 @@ void inputX() {
 	} else {done = 1;}
     }
 }
-void inputY() {
+void inputY() { //input for O (accidentaly titled y), used for xMove
     bool done = 0;
     while(!done) {
      if(!(std::cin >> yCord))       
@@ -26,24 +26,24 @@ void inputY() {
 	} else {done = 1;}
     } 
 }
-void oMove() {
+void oMove() { //taking input for O
         std::cout << "O moves: X Cordinate: ";
     inputX();
     std::cout << "         Y Cordinate: ";
     inputY();
 }
-void xMove() {    
+void xMove() {    //taking input for X
     std::cout << "X moves: X Cordinate: ";
     inputX();
     std::cout << "         Y Cordinate: ";
     inputY();}
-void Move() {
+void Move() { //taking input used for invalid options to amke things clearer
     std::cout << "         X Cordinate: ";
     inputX();
     std::cout << "         Y Cordinate: ";
     inputY();
 }
-void boardReset() {
+void boardReset() { //resetting the board
 
     for(int i=0;i<3;++i) {
         for(int j=0;j<3;++j) {
@@ -58,7 +58,7 @@ void boardReset() {
     }      
 
 }
-void boardShow() {
+void boardShow() { //showing the current board
     std::cout << std::endl;
     std::cout << "   1 2 3" << std::endl;
     for(int i=0;i<3;i++) {
@@ -69,7 +69,7 @@ void boardShow() {
         std::cout << std::endl;
     } 
 }
-bool Winning() {
+bool Winning() { //checking if there are any winners
 
     //Vertical
            if(board[0][0] != ' ' && board[0][1] != ' ' && board[0][2] != ' ' && board[0][0] == board[0][1] && board[0][2] == board[0][0] && board[0][2] == board[0][1]) {
@@ -94,7 +94,7 @@ bool Winning() {
         return true;
     }  else {return false;}
 }
-bool Draw() {
+bool Draw() { //cheking for draw
     for(int i=0;i<3;++i) {
         for(int j=0;j<3;++j) {
             if(board[i][j] == ' ') {
@@ -104,13 +104,13 @@ bool Draw() {
     }
     return true;
 }
-bool game() {
+bool game() { //The Game
 boardReset();
 boardShow();
 
-
-
+//Main function
 for(bool win=0;!win;) {
+    //X moves
     xMove();
     if(boardCheck[yCord-1][xCord-1] == 'n') {
     board[yCord-1][xCord-1] = 'X';
@@ -129,7 +129,7 @@ for(bool win=0;!win;) {
     }
     
     boardShow();
-    
+    //Checking for winner x/draw
     bool winningEnd = Winning();
     if(winningEnd && win==0) { 
         win=1;
@@ -143,6 +143,7 @@ for(bool win=0;!win;) {
 
     std::cout << std::endl;
 
+    //O Moves
     if(win==0) {
         oMove();
         if(boardCheck[yCord-1][xCord-1] == 'n') {
@@ -164,7 +165,7 @@ for(bool win=0;!win;) {
     }
         
         boardShow();
-
+    //checking for winner O
         if(winningEnd && win==0) { 
             win=1;
             std::cout << std::endl;
@@ -175,7 +176,7 @@ for(bool win=0;!win;) {
 
     
 }
-
+//play again
 std::string again;
     std::cout << "Play again? (y/n): ";
     std::cin >> again;
@@ -196,5 +197,6 @@ while(end == 1) {
     end = game();
 }
 
+return 0;
 }
 
