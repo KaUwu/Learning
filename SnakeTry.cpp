@@ -6,12 +6,11 @@ using std::cout, std::endl, std::cin;
 
 
 bool exitGame = false;
-bool yMove = true;
-bool movingDown = true;
+bool movingLe, movingFel, movingBalra, movingJobbra;
 
+char keyPressed;
 char board[10][10];
-int score=0;
-static int ySnakePos = 0;
+int score, ySnakePos, xSnakePos;
 
 void Setup() {
     for(int i=0;i<10;i++) { // resetting the board to all ' ' characters
@@ -56,6 +55,17 @@ void Setup() {
     board[9][6] = '#';
     board[9][7] = '#';
     board[9][8] = '#';
+
+    //disabling all movments
+    movingBalra = false;
+    movingFel = false;
+    movingJobbra = false;
+    movingLe = false;
+
+    //setting the score to zero and resetting snake position
+    score=0;
+    ySnakePos = 5;
+    xSnakePos = 5;
 }
 void Render() {
 
@@ -63,6 +73,7 @@ void Render() {
 
     cout << "Score: " << score << endl; //Display the score
 
+    //display game
         for(int i=0;i<10;i++) {
             for(int j=0;j<10;j++) {
                 cout << board[i][j] << " ";
@@ -73,32 +84,75 @@ void Render() {
 
 }
 void Logic() {
-    if(movingDown) {
-        if(ySnakePos != 0 && ySnakePos != 8) {
-            board[ySnakePos][5] = ' ';
-        }
-        ySnakePos++;
-        if(ySnakePos == 9) {
-            movingDown = 0;
-            score++;
-        }
-        if(ySnakePos != 9) {
-            board[ySnakePos][5] = '0';
-        }
+//capturing keypresses
+if(_kbhit()) {
+    keyPressed = _getch();
+    if(keyPressed == 'w') {
+        movingFel = true; 
+        movingJobbra = false; 
+        movingLe = false;   
+        movingBalra = false;
+    } else if(keyPressed == 'a') {
+        movingBalra = true;
+        movingFel = false;
+        movingJobbra = false; 
+        movingLe = false;
+    } else if(keyPressed == 's') {
+        movingLe = true;
+        movingJobbra = false; 
+        movingFel = false;
+        movingBalra = false;
+    } else if(keyPressed == 'd') {
+        movingJobbra = true;
+        movingFel = false;
+        movingLe = false;
+        movingBalra = false;
+}
+}
 
-    } else {
-         if(ySnakePos != 9 && ySnakePos != 1) {
-            board[ySnakePos][5] = ' ';
-        }
-        ySnakePos--;
-        if(ySnakePos == 0) {
-            movingDown = 1;
-            score++;
-        }
-        if(ySnakePos != 0) {
-            board[ySnakePos][5] = '0';
-        }
-    }
+//debug?
+cout << keyPressed << movingFel;
+
+//actually moving the lil blob
+if(movingLe) {
+            board[ySnakePos][xSnakePos] = ' ';
+        if(ySnakePos == 8) 
+            { board[ySnakePos][xSnakePos] = ' ';
+              ySnakePos = 1; 
+            } 
+        else {ySnakePos++;}
+            board[ySnakePos][xSnakePos] = '0';
+}
+if(movingFel) {
+            board[ySnakePos][xSnakePos] = ' ';
+        if(ySnakePos == 1) 
+            { board[ySnakePos][xSnakePos] = ' ';
+              ySnakePos = 8; 
+            } 
+        else {ySnakePos--;}
+            board[ySnakePos][xSnakePos] = '0';
+}
+if(movingBalra) {
+            board[ySnakePos][xSnakePos] = ' ';
+        if(xSnakePos == 1) 
+            { board[ySnakePos][xSnakePos] = ' ';
+              xSnakePos = 8; 
+            } 
+        else {xSnakePos--;}
+            board[ySnakePos][xSnakePos] = '0';
+}
+if(movingJobbra) {
+            board[ySnakePos][xSnakePos] = ' ';
+        if(xSnakePos == 8) 
+            { board[ySnakePos][xSnakePos] = ' ';
+              xSnakePos = 1; 
+            }
+        else {xSnakePos++;}
+           board[ySnakePos][xSnakePos] = '0';
+}
+
+
+
 }
 
 int main() {
@@ -106,7 +160,7 @@ int main() {
     while(!exitGame) {
         Render();
         Logic();
-        std::this_thread::sleep_for(std::chrono::milliseconds(300));
+        std::this_thread::sleep_for(std::chrono::milliseconds(300)); //set game pace
     }
     return 0;
 }
